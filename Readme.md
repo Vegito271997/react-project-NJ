@@ -61,3 +61,43 @@ OR
 
 # browserslist (in package,json)
 - used for older browser version to support the website
+
+
+#                          day-3
+
+# script (package.json)
+- For start ->
+       instead of using npx run parcel index.html for dev start we can add a key value for it like "start": "parcel index.html" and then use npm start to start the project
+- For build ->
+       add "build": "parcel build index.html" and use cmd npm run build for production build.
+
+ # JSX
+ - is a javascript syntax which is easier to write javascript elements
+ - jsx is very different from react.
+ - jsx just keeps it easy for developer to write react code.
+ - jsx is kind of conventions which merge javascript and html.
+ - jsx not HTML inside js rather jsx has html like syntax.
+ - parcel transpile(converts) the jsx code in our file before the code goes to the js engine and then js engine receive the code that browser can understand.
+ - JSX element should always be wrapped inside () bracket for babel to understand from where the code starts and where it ends. if the jsx code is bigger than the single line.
+ - PTBN - Parcel does not do it by itself rather it gives this task to a package called BABEL.
+ - JSX helps to prevent cross-site scripting attack on users computer.
+
+
+ # Babel
+
+- babel is installed along with Parcel as it's dependency.
+- babel's job is to transpiler(convert) the jsx code to a code which is understandable by js engine as soon as we save the file.
+- Babel is a js compiler.
+- Basically( "=>"  means "converted" ) jsx => react element => object => html element(inside render()) with the help of BABEL.
+- Babel also converts ES6 code to older JS code for the older browser.
+
+# React- Component
+- Everything inside react is a component.
+- There are 2 types of component in react 
+- 1. Class component - Old way of writing code. Uses JS classes.
+- 2. Functional component - new way. Uses JS functions.
+- react functional component is a js function which returns jsx.
+
+# Important Points
+- attributes in JSX follows 'camelcase'. e.g. - className, tabIndex etc.
+- Component Composition - Composing 2 components inside 1 another. E.g creating a login page we create 3 component 1. login 2. button, 3. text-input. So composing button and text-input component inside login component is component composition.
