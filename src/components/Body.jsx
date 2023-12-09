@@ -1,10 +1,12 @@
 import React from "react";
-import { ReactDOM } from "react-dom/client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ResturantCard from "./ResturantCard";
 import { resList } from "../utlis/mockData";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utlis/useOnlineStatus";
+import withPromotedLabel from "../utlis/withPromotedLabel";
+import UserContext from "../utlis/UserContext";
 
 const Body = () => {
   const [resturantList, setResturantList] = useState([]);
@@ -32,21 +34,30 @@ const Body = () => {
     );
   };
 
+  const { loggedInInfo, setUserName } = useContext(UserContext);
+  const onlineStatus = useOnlineStatus();
+  if (onlineStatus === false)
+    return (
+      <h1>Looks like you are offline!! Please check you internet connection</h1>
+    );
+
+  const ResturantCardPromoted = withPromotedLabel(ResturantCard);
+
   return resturantList.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
       {/* <div className="search">Search</div> */}
-      <div>
+      <div className="m-4 p-4">
         <input
-          className="input-class"
+          className="border border-solid rounded-md h-8 w-56 border-black"
           value={txtSearch}
           onChange={(e) => {
             setTextSearch(e.target.value);
           }}
         ></input>
         <button
-          className="btn-search"
+          className="border border-solid rounded-md border-black bg-black text-sky-100 m-4 p-1"
           onClick={() => {
             const filteredResturantList = resturantList.filter((res) =>
               res.info.name.toLowerCase().includes(txtSearch.toLowerCase())
@@ -57,7 +68,7 @@ const Body = () => {
           Search
         </button>
         <button
-          className="class-btn"
+          className="border border-solid rounded-md border-black bg-black text-sky-100 m-4 p-1"
           onClick={() => {
             const filteredList = filteredResList.filter(
               (list) => list.info.avgRating >= 4
@@ -67,11 +78,21 @@ const Body = () => {
         >
           Top Rated Resturants{" "}
         </button>
+        <input
+          className="border border-solid rounded-md h-8 w-56 border-black"
+          value={loggedInInfo}
+          onChange={(e) => setUserName(e.target.value)}
+        />
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filteredResList.map((data) => (
           <Link key={data.info.id} to={"/resturantmenu/" + data.info.id}>
-            <ResturantCard resData={data} />
+            {/** if promoted is true return higher order component */}
+            {data.info.veg ? (
+              <ResturantCardPromoted resData={data} />
+            ) : (
+              <ResturantCard resData={data} />
+            )}
           </Link>
         ))}
       </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./app.css";
 import Header from "./components/Header";
@@ -8,13 +8,29 @@ import About from "./components/About";
 import Error from "./components/Error";
 import ContactUs from "./components/ContactUs";
 import ResturantMenu from "./components/ResturantMenu";
+import { lazy } from "react";
+import Shimmer from "./components/Shimmer";
+import UserContext from "./utlis/UserContext";
 
+const Grocery = lazy(() => import("./components/Grocery"));
 const AppLayout = () => {
+  const [userName, setUserName] = useState();
+
+  useEffect(() => {
+    // make an api call to fetch username and password
+    const data = {
+      name: "Prateek Shukla",
+    };
+    setUserName(data.name);
+  });
+
   return (
-    <div className="app-layout">
-      <Header />
-      <Outlet />
-    </div>
+    <UserContext.Provider value={{ loggedInInfo: userName, setUserName }}>
+      <div className="app-layout">
+        <Header />
+        <Outlet />
+      </div>
+    </UserContext.Provider>
   );
 };
 
@@ -34,6 +50,15 @@ const appRouter = createBrowserRouter([
       {
         path: "/contactus",
         element: <ContactUs />,
+      },
+      {
+        path: "/grocery",
+        element: (
+          <Suspense fallback={<Shimmer />}>
+            {" "}
+            <Grocery />
+          </Suspense>
+        ),
       },
       {
         path: "/resturantmenu/:resid",
